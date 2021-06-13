@@ -1,0 +1,42 @@
+[
+  {
+    "from": "",
+    "to": "asd",
+    "amount": 1.11
+  },
+  {
+    "from": null,
+    "to": "asd",
+    "amount": 1.11
+  },
+  {
+    "from": "asd",
+    "to": "",
+    "amount": 1.11
+  },
+  {
+    "from": "asd",
+    "to": null,
+    "amount": 1.11
+  },
+  {
+    "from": "asd",
+    "to": "qwe",
+    "amount": null
+  },
+  {
+    "from": "asd",
+    "to": "qwe",
+    "amount": -1.0
+  },
+  {
+    "from": "asd",
+    "to": "qwe",
+    "amount": 0
+  },
+  {
+    "from": null,
+    "to": null,
+    "amount": null
+  }
+]

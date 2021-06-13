@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import by.sashnikov.conversion.service.ConversionService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +31,7 @@ public class ConversionController {
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    private Mono<ConversionResponse> convert(@RequestBody ConversionRequest conversionRequest) {
+    private Mono<ConversionResponse> convert(@RequestBody @Valid ConversionRequest conversionRequest) {
         return conversionService.convert(conversionRequest);
     }
 
@@ -34,8 +39,14 @@ public class ConversionController {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ConversionRequest {
+        @NotEmpty
         private String from;
+
+        @NotEmpty
         private String to;
+        
+        @NotNull
+        @DecimalMin(value = "0.0", inclusive = false)
         private BigDecimal amount;
     }
 
