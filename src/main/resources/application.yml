@@ -1,0 +1,13 @@
+logging:
+  level:
+    org.springframework.web.reactive: debug
+    org.springframework.http: debug
+    com.fasterxml.jackson: debug
+
+
+conversion:
+  provider:
+    exchangerate-api-com:
+      api-url: https://v6.exchangerate-api.com/v6
+      pair-conversion-path: /{api-key}/pair/{from}/{to}
+      api-key:

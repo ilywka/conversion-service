@@ -33,4 +33,3 @@ public class TestUtil {
         return OBJECT_MAPPER.writeValueAsString(object);
     }
 }
-

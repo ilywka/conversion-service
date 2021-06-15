@@ -25,13 +25,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Stream;
 
-import by.sashnikov.conversion.controller.ConversionController.ConversionRequest;
-import by.sashnikov.conversion.controller.ConversionController.ConversionResponse;
-import by.sashnikov.conversion.service.ConversionService;
+import by.sashnikov.conversion.service.CurrencyConversionService;
 import reactor.core.publisher.Mono;
 
-@WebFluxTest(ConversionController.class)
-class ConversionControllerTest {
+@WebFluxTest(CurrencyConversionController.class)
+class CurrencyConversionControllerTest {
 
     private static final String REQUEST_DATA_FILE_PATH = "classpath:by/sashnikov/conversion/controller/conversion-request-test-data.json";
     private static final String RESPONSE_DATA_FILE_PATH = "classpath:by/sashnikov/conversion/controller/conversion-response-test-data.json";
@@ -39,18 +37,18 @@ class ConversionControllerTest {
     private static final String CONVERSION_ENDPOINT_PATH = "/api/v1/currency/conversion";
 
     @MockBean
-    private ConversionService conversionServiceMock;
+    private CurrencyConversionService currencyConversionServiceMock;
     @Autowired
     private WebTestClient testClient;
 
     @Test
-    void shouldCallConversionService() {
+    void testConversionEndpoint() {
         //given
         String requestString = readFileAsString(REQUEST_DATA_FILE_PATH);
         String responseString = readFileAsString(RESPONSE_DATA_FILE_PATH);
 
-        ConversionResponse conversionResponse = new ConversionResponse("qwe", "asd", BigDecimal.valueOf(1.11), BigDecimal.valueOf(2.22));
-        when(conversionServiceMock.convert(any(ConversionRequest.class))).thenReturn(Mono.just(conversionResponse));
+        ConversionResponse conversionResponse = new ConversionResponse("ASD", "QWE", BigDecimal.valueOf(1.11), BigDecimal.valueOf(2.22));
+        when(currencyConversionServiceMock.convert(any(ConversionRequest.class))).thenReturn(Mono.just(conversionResponse));
 
         //when
         ResponseSpec responseSpec = testClient.post()
@@ -63,6 +61,7 @@ class ConversionControllerTest {
         //then
         responseSpec
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody().json(responseString);
     }
 
