@@ -1,16 +1,19 @@
-package by.sashnikov.conversion.provider.exchangerateapi.responsehandler;
+package by.sashnikov.conversion.provider.exchangerateapicom.handler;
 
 import org.springframework.stereotype.Component;
 
 import by.sashnikov.conversion.model.ConversionRate;
-import by.sashnikov.conversion.provider.exchangerateapi.model.ProviderPairConversionRateSuccessResponse;
-import by.sashnikov.conversion.provider.exchangerateapi.model.ProviderPairConversionResponse;
+import by.sashnikov.conversion.provider.exchangerateapicom.ExchangeRateApiComConversionProviderEnabled;
+import by.sashnikov.conversion.provider.exchangerateapicom.model.ProviderPairConversionRateSuccessResponse;
+import by.sashnikov.conversion.provider.exchangerateapicom.model.ProviderPairConversionResponse;
 
 @Component
+@ExchangeRateApiComConversionProviderEnabled
 public class ProviderSuccessResponseHandlerImpl implements ProviderResponseHandler<ProviderPairConversionRateSuccessResponse> {
+
     @Override
-    public boolean canHandle(Class<? extends ProviderPairConversionResponse> responseClass) {
-        return ProviderPairConversionRateSuccessResponse.class.equals(responseClass);
+    public Class<? extends ProviderPairConversionResponse> responseType() {
+        return ProviderPairConversionRateSuccessResponse.class;
     }
 
     @Override

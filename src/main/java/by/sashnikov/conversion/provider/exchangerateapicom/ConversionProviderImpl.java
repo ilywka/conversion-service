@@ -10,13 +10,15 @@ import java.util.Map;
 
 import by.sashnikov.conversion.exception.CurrencyConversionException;
 import by.sashnikov.conversion.model.ConversionRate;
-import by.sashnikov.conversion.provider.exchangerateapi.model.ProviderPairConversionResponse;
-import by.sashnikov.conversion.provider.exchangerateapi.responsehandler.ProviderResponseHandler;
+import by.sashnikov.conversion.provider.exchangerateapicom.ExchangeRateApiComConversionProviderEnabled;
+import by.sashnikov.conversion.provider.exchangerateapicom.model.ProviderPairConversionResponse;
+import by.sashnikov.conversion.provider.exchangerateapicom.handler.ProviderResponseHandler;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
+@ExchangeRateApiComConversionProviderEnabled
 public class ConversionProviderImpl implements ConversionProvider {
 
     private final WebClient webClient;
@@ -52,14 +54,15 @@ public class ConversionProviderImpl implements ConversionProvider {
             .uri(providerProperties.getPairConversionPath(), uriVariables)
             .retrieve()
             .onStatus(HttpStatus::isError,
-                clientResponse -> Mono.error(new CurrencyConversionException(String.format("Currency conversion request error, %s", clientResponse.rawStatusCode()))))
+                clientResponse ->
+                    Mono.error(new CurrencyConversionException(String.format("Currency conversion request error, %s", clientResponse.rawStatusCode()))))
             .bodyToMono(ProviderPairConversionResponse.class);
     }
 
     @SuppressWarnings("unchecked")
     private ConversionRate handleResponse(ProviderPairConversionResponse response) {
         for (ProviderResponseHandler responseHandler : responseHandlers) {
-            if (responseHandler.canHandle(response.getClass())) {
+            if (response.getClass().equals(responseHandler.responseType())) {
                 return responseHandler.handle(response);
             }
         }

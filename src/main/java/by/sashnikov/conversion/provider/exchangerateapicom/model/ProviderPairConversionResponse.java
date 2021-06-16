@@ -1,4 +1,4 @@
-package by.sashnikov.conversion.provider.exchangerateapi.model;
+package by.sashnikov.conversion.provider.exchangerateapicom.model;
 
 import static java.util.Objects.isNull;
 

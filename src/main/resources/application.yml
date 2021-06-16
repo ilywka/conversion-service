@@ -1,6 +1,7 @@
 conversion:
   provider:
     exchangerate-api-com:
+      enabled: true
       api-url: https://v6.exchangerate-api.com/v6
       pair-conversion-path: /{api-key}/pair/{from}/{to}
       api-key:
