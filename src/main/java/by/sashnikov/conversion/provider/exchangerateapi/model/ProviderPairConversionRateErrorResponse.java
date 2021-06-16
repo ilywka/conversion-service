@@ -1,4 +1,4 @@
-package by.sashnikov.conversion.provider.model;
+package by.sashnikov.conversion.provider.exchangerateapi.model;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

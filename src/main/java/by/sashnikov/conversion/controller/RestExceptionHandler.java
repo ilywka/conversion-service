@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 public class RestExceptionHandler {
 
     @ExceptionHandler
-    public Mono conversionExceptionHandler(CurrencyConversionException exception) {
+    public Mono<?> conversionExceptionHandler(CurrencyConversionException exception) {
         return Mono.error(new ResponseStatusException(exception.getHttpStatus(), exception.getMessage()));
     }
 }

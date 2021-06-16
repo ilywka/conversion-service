@@ -1,4 +1,4 @@
-package by.sashnikov.conversion.provider;
+package by.sashnikov.conversion.provider.exchangerateapi;
 
 import org.springframework.http.HttpStatus;
 
