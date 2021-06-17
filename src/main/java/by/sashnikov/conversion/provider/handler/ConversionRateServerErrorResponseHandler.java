@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 
 import java.util.Optional;
 
-import by.sashnikov.conversion.exception.CurrencyConversionException;
+import by.sashnikov.conversion.exception.InternalCurrencyConversionException;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -25,7 +25,8 @@ public class ConversionRateServerErrorResponseHandler implements GenericResponse
     }
 
     private Mono statusToException(HttpStatus httpStatus) {
-        return Mono.error(new CurrencyConversionException(String.format("Currency conversion request error, %s", httpStatus.value())));
+        String message = String.format("Currency conversion request error, %s", httpStatus.value());
+        return Mono.error(new InternalCurrencyConversionException(message));
     }
 }
 
