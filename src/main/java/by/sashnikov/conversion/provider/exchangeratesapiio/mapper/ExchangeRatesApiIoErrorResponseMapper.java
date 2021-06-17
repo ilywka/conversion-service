@@ -3,7 +3,8 @@ package by.sashnikov.conversion.provider.exchangeratesapiio.mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import by.sashnikov.conversion.exception.CurrencyConversionException;
+import by.sashnikov.conversion.exception.InternalCurrencyConversionException;
+import by.sashnikov.conversion.exception.UserInputCurrencyConversionException;
 import by.sashnikov.conversion.model.ConversionRate;
 import by.sashnikov.conversion.provider.exchangeratesapiio.ExchangeRatesApiIoConversionProviderEnabled;
 import by.sashnikov.conversion.provider.exchangeratesapiio.model.ExchangeRatesApiIoPairConversionErrorResponse;
@@ -27,7 +28,11 @@ public class ExchangeRatesApiIoErrorResponseMapper implements ExchangeRatesApiIo
         ErrorDescription error = errorResponse.getError();
         String errorType = error.getInfo();
         HttpStatus httpCode = ProviderHttpCodeResolver.resolve(error.getCode());
-        throw new CurrencyConversionException(String.format("Currency conversion error: %s", errorType), httpCode);
+        if (httpCode.is4xxClientError()) {
+            throw new UserInputCurrencyConversionException(String.format("Currency conversion error: %s", errorType));
+        } else {
+            throw new InternalCurrencyConversionException(String.format("Currency conversion error: %s", errorType));
+        }
     }
 }
 
