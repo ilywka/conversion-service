@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonDeserialize
 public class ExchangeRatesApiIoPairConversionSuccessResponse extends ExchangeRatesApiIoPairConversionResponse {
-
+    private Boolean success;
     private String base;
     private Map<String, BigDecimal> rates;
 }

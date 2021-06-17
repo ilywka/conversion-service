@@ -8,6 +8,6 @@ conversion:
 
     exchangerates-api-io:
       enabled: false
-      api-url: https://api.exchangeratesapi.io/v1
+      api-url: http://api.exchangeratesapi.io/v1
       conversion-rate-path: /latest?access_key={api-key}&base={from}&symbols={to}
       api-key: 

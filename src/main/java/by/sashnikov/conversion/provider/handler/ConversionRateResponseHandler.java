@@ -16,15 +16,15 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.SynchronousSink;
 
 /**
- * @param <T> success response type
+ * @param <T> success response body type
  */
 @Slf4j
-public class ConversionRateSuccessResponseHandler<T> implements ResponseHandler<ConversionRate> {
+public class ConversionRateResponseHandler<T> implements ResponseHandler<ConversionRate> {
 
     private final Map<Class<? extends T>, ProviderResponseMapper<T, ConversionRate>> responseMappers;
     private final Class<T> requestBaseType;
 
-    public ConversionRateSuccessResponseHandler(List<? extends ProviderResponseMapper<T, ConversionRate>> mappers) {
+    public ConversionRateResponseHandler(List<? extends ProviderResponseMapper<T, ConversionRate>> mappers) {
         responseMappers = mappers.stream().collect(Collectors.toMap(ProviderResponseMapper::supportedResponseType, Function.identity()));
         requestBaseType = getFunctionBaseType(mappers.stream().findAny().get());
     }
@@ -37,7 +37,7 @@ public class ConversionRateSuccessResponseHandler<T> implements ResponseHandler<
     @Override
     public Optional<Mono<ConversionRate>> handle(ClientResponse clientResponse) {
         return Optional.of(clientResponse)
-            .filter(this::isSuccessful)
+            .filter(this::isNotServerError)
             .map(clientResponse1 -> clientResponse1.bodyToMono(requestBaseType))
             .map(rMono -> rMono.handle(this::mapResponseObject));
     }
@@ -49,7 +49,7 @@ public class ConversionRateSuccessResponseHandler<T> implements ResponseHandler<
         }
     }
 
-    private boolean isSuccessful(ClientResponse clientResponse) {
-        return clientResponse.statusCode().is2xxSuccessful();
+    private boolean isNotServerError(ClientResponse clientResponse) {
+        return !clientResponse.statusCode().is5xxServerError();
     }
 }

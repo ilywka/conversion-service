@@ -13,7 +13,7 @@ public class ExchangeRatesApiIoPairConversionErrorResponse extends ExchangeRates
 
     @Data
     public static class ErrorDescription {
-        private int code;
+        private String code;
         private String info;
     }
 }

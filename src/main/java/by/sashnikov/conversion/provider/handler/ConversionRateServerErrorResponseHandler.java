@@ -20,7 +20,7 @@ public class ConversionRateServerErrorResponseHandler implements GenericResponse
     public Optional<Mono> handle(ClientResponse clientResponse) {
         return Optional.of(clientResponse)
             .map(ClientResponse::statusCode)
-            .filter(HttpStatus::isError)
+            .filter(HttpStatus::is5xxServerError)
             .map(this::statusToException);
     }
 

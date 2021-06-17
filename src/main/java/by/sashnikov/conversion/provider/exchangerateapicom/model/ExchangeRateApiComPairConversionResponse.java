@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 
+import by.sashnikov.conversion.provider.exchangerateapicom.model.ExchangeRateApiComPairConversionResponse.PairConversionResponseDeserializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,25 +20,26 @@ import lombok.NoArgsConstructor;
 @JsonDeserialize(using = PairConversionResponseDeserializer.class)
 public abstract class ExchangeRateApiComPairConversionResponse {
     private String result;
-}
 
-class PairConversionResponseDeserializer extends StdDeserializer<ExchangeRateApiComPairConversionResponse> {
+    static class PairConversionResponseDeserializer extends StdDeserializer<ExchangeRateApiComPairConversionResponse> {
 
-    private static final String  ERROR_FIELD_NAME = "error-type";
+        private static final String  ERROR_FIELD_NAME = "error-type";
 
-    public PairConversionResponseDeserializer() {
-        super(ExchangeRateApiComPairConversionResponse.class);
-    }
+        public PairConversionResponseDeserializer() {
+            super(ExchangeRateApiComPairConversionResponse.class);
+        }
 
-    @Override
-    public ExchangeRateApiComPairConversionResponse deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        ObjectCodec codec = p.getCodec();
-        TreeNode jsonNode = codec.readTree(p);
-        TreeNode errorField = jsonNode.get(ERROR_FIELD_NAME);
-        if (isNull(errorField)) {
-            return codec.treeToValue(jsonNode, ExchangeRateApiComPairConversionRateSuccessResponse.class);
-        } else {
-            return codec.treeToValue(jsonNode, ExchangeRateApiComPairConversionRateErrorResponse.class);
+        @Override
+        public ExchangeRateApiComPairConversionResponse deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            ObjectCodec codec = p.getCodec();
+            TreeNode jsonNode = codec.readTree(p);
+            TreeNode errorField = jsonNode.get(ERROR_FIELD_NAME);
+            if (isNull(errorField)) {
+                return codec.treeToValue(jsonNode, ExchangeRateApiComPairConversionRateSuccessResponse.class);
+            } else {
+                return codec.treeToValue(jsonNode, ExchangeRateApiComPairConversionRateErrorResponse.class);
+            }
         }
     }
+
 }

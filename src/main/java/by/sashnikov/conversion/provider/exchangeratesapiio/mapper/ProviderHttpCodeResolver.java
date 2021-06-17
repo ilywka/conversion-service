@@ -9,12 +9,12 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class ProviderHttpCodeResolver {
 
-    private static final Map<Integer, HttpStatus> error2httpCode = Map.ofEntries(
-        Map.entry(201, HttpStatus.BAD_REQUEST),
-        Map.entry(202, HttpStatus.BAD_REQUEST)
+    private static final Map<String, HttpStatus> error2httpCode = Map.ofEntries(
+        Map.entry("invalid_base_currency", HttpStatus.BAD_REQUEST),
+        Map.entry("invalid_currency_codes", HttpStatus.BAD_REQUEST)
     );
 
-    public static HttpStatus resolve(int errorType) {
+    public static HttpStatus resolve(String errorType) {
         return error2httpCode.getOrDefault(errorType, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

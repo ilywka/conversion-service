@@ -30,19 +30,20 @@ import okhttp3.mockwebserver.RecordedRequest;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ExchangeRatesApiIoCurrencyConversionSmokeTest {
 
-    private static final String CONVERSION_REQUEST_FILE = "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-request-test-data.json";
+    private static final String BASE_TEST_DIRECTORY_PATH = "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/";
+    private static final String CONVERSION_REQUEST_FILE = BASE_TEST_DIRECTORY_PATH + "conversion-request-test-data.json";
     private static final String CONVERSION_INCORRECT_CODE_REQUEST_FILE =
-        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-incorrect-code-request-test-data.json";
+        BASE_TEST_DIRECTORY_PATH + "conversion-incorrect-code-request-test-data.json";
     private static final String CONVERSION_QUOTA_REACHED_REQUEST_FILE =
-        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-quota-reached-request-test-data.json";
+        BASE_TEST_DIRECTORY_PATH + "conversion-quota-reached-request-test-data.json";
     private static final String CONVERSION_RATE_PROVIDER_SUCCESS_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-rate-provider-success-response-test-data.json";
+        BASE_TEST_DIRECTORY_PATH + "conversion-rate-provider-success-response-test-data.json";
     private static final String CONVERSION_RATE_PROVIDER_INCORRECT_CODE_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-rate-provider-incorrect-code-response-test-data.json";
-    private static final String CONVERSION_RATE_PROVIDER_QUOTA_REACHED_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-rate-provider-quota-reached-response-test-data.json";
+        BASE_TEST_DIRECTORY_PATH + "conversion-rate-provider-incorrect-code-response-test-data.json";
+    private static final String CONVERSION_RATE_PROVIDER_INVALID_API_KEY_RESPONSE_FILE =
+        BASE_TEST_DIRECTORY_PATH + "conversion-rate-provider-invalid-api-key-response-test-data.json";
     private static final String CONVERSION_EXPECTED_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-expected-response-test-data.json";
+        BASE_TEST_DIRECTORY_PATH + "conversion-expected-response-test-data.json";
     private static final String PROVIDER_CONVERSION_REQUEST_PATH = "/latest?access_key={api-key}&base={from}&symbols={to}";
     private static final String API_KEY = "1q2w3e4r";
 
@@ -79,19 +80,19 @@ public class ExchangeRatesApiIoCurrencyConversionSmokeTest {
                     .replace("{from}", "USD")
                     .replace("{to}", "EUR");
                 String conversionInvalidRequestPath = conversionCorrectRequestPath.replace("USD", "QWE");
-                String conversionQuotaReachedPath = conversionCorrectRequestPath.replace("USD", "AED");
+                String conversionInvalidApiKey = conversionCorrectRequestPath.replace("USD", "AED");
                 if (conversionCorrectRequestPath.equals(request.getPath())) {
                     return new MockResponse().setResponseCode(HttpStatus.OK.value())
                         .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                         .setBody(readFileAsString(CONVERSION_RATE_PROVIDER_SUCCESS_RESPONSE_FILE));
                 } else if (conversionInvalidRequestPath.equals(request.getPath())) {
-                    return new MockResponse().setResponseCode(HttpStatus.OK.value())
+                    return new MockResponse().setResponseCode(HttpStatus.BAD_REQUEST.value())
                         .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                         .setBody(readFileAsString(CONVERSION_RATE_PROVIDER_INCORRECT_CODE_RESPONSE_FILE));
-                } else if (conversionQuotaReachedPath.equals(request.getPath())) {
-                    return new MockResponse().setResponseCode(HttpStatus.OK.value())
+                } else if (conversionInvalidApiKey.equals(request.getPath())) {
+                    return new MockResponse().setResponseCode(HttpStatus.BAD_REQUEST.value())
                         .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .setBody(readFileAsString(CONVERSION_RATE_PROVIDER_QUOTA_REACHED_RESPONSE_FILE));
+                        .setBody(readFileAsString(CONVERSION_RATE_PROVIDER_INVALID_API_KEY_RESPONSE_FILE));
                 }
                 return new MockResponse().setResponseCode(HttpStatus.NOT_FOUND.value());
             }
