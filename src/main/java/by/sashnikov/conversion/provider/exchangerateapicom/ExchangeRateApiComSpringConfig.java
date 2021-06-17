@@ -45,7 +45,7 @@ public class ExchangeRateApiComSpringConfig {
         return new ResponseHandlersChain<>(handlers);
     }
 
-    @Bean
+    @Bean("exchangeRateApiComConversionProvider")
     public ConversionProvider conversionProvider(
         Builder clientBuilder,
         ProviderProperties exchangeRateApiComProviderProperties,

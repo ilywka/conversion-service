@@ -45,7 +45,7 @@ public class ExchangeRatesApiIoSpringConfig {
         return new ResponseHandlersChain<>(handlers);
     }
 
-    @Bean
+    @Bean("exchangeRatesApiIoConversionProvider")
     public ConversionProvider conversionProvider(
         Builder clientBuilder,
         ProviderProperties exchangeRatesApiIoProviderProperties,
