@@ -24,8 +24,8 @@ ___
 Run
 
 ```
-./mvnw spring-boot:run
--Dspring-boot.run.profiles=production
+./mvnw spring-boot:run \
+-Dspring-boot.run.profiles=production \
 -Dspring-boot.run.jvmArguments="-Dconversion.provider.exchangerate-api-com.api-key={Insert exchangerate-api-com api key} -Dconversion.provider.exchangerates-api-io.api-key={Insert exchangerates-api-io api key}"
 ```
 
