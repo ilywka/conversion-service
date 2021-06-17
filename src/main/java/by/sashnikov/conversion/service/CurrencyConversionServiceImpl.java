@@ -29,8 +29,6 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
     @Override
     public Mono<ConversionResponse> convert(ConversionRequest conversionRequest) {
         Queue<ConversionProvider> queue = shuffleProviders();
-        log.info("Received connection request {}. Conversion providers order: {}", conversionRequest, queue);
-
         ConversionProvider provider;
         Mono<ConversionRate> pipeline = queue.poll().getConversionRate(conversionRequest.getFrom(), conversionRequest.getTo());
         while ((provider = queue.poll()) != null) {
