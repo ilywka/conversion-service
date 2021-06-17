@@ -6,7 +6,7 @@
 Service provides currency conversion functionality.\
 2 providers used to get conversion rates:
 * https://www.exchangerate-api.com
-* https://www.exchangerates-api.io
+* https://www.exchangeratesapi.io
 
 ## Getting Started
 
