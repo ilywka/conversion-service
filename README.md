@@ -1,4 +1,3 @@
-
 # Currency conversion service
 
 ## Description
@@ -16,14 +15,19 @@ Service provides currency conversion functionality.\
 * Providers api keys
 
 ### Commands
+___
+Build project
 
-####build
 `mvn clean package`
+___
 
-####run
-`
+Run
+
+```
 mvn spring-boot:run
 -Dspring-boot.run.profiles=production
--Dspring-boot.run.jvmArguments="-Dconversion.provider.exchangerate-api-com.api-key={Insert exchangerate-api-com api key}
--Dconversion.provider.exchangerates-api-io.api-key={Insert exchangerates-api-io api key}"
-`
+-Dspring-boot.run.jvmArguments="-Dconversion.provider.exchangerate-api-com.api-key={Insert exchangerate-api-com api key} -Dconversion.provider.exchangerates-api-io.api-key={Insert exchangerates-api-io api key}"
+```
+
+By default service runs on 8080 port
+___
