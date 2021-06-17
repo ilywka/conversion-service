@@ -15,8 +15,10 @@ import by.sashnikov.conversion.exception.InternalCurrencyConversionException;
 import by.sashnikov.conversion.model.ConversionRate;
 import by.sashnikov.conversion.provider.ConversionProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CurrencyConversionServiceImpl implements CurrencyConversionService {
@@ -27,14 +29,23 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
     @Override
     public Mono<ConversionResponse> convert(ConversionRequest conversionRequest) {
         Queue<ConversionProvider> queue = shuffleProviders();
+        log.info("Received connection request {}. Conversion providers order: {}", conversionRequest, queue);
+
         ConversionProvider provider;
         Mono<ConversionRate> pipeline = queue.poll().getConversionRate(conversionRequest.getFrom(), conversionRequest.getTo());
         while ((provider = queue.poll()) != null) {
             ConversionProvider conversionProvider = provider;
             pipeline = pipeline.onErrorResume(InternalCurrencyConversionException.class, e -> conversionProvider.getConversionRate(conversionRequest.getFrom(), conversionRequest.getTo()));
         }
-        return pipeline.map(conversionRate -> currencyConverter.convert(conversionRequest.getAmount(), conversionRate.getRate()))
+
+        return pipeline
+            .map(conversionRate -> convertBaseValue(conversionRequest, conversionRate))
             .map(convertedValue -> createResponse(conversionRequest, convertedValue));
+    }
+
+    private BigDecimal convertBaseValue(ConversionRequest conversionRequest, ConversionRate conversionRate) {
+        log.info("Converting from {} to {}", conversionRequest.getFrom(), conversionRequest.getTo());
+        return currencyConverter.convert(conversionRequest.getAmount(), conversionRate.getRate());
     }
 
     private Queue<ConversionProvider> shuffleProviders() {

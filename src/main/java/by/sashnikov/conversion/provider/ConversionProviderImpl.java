@@ -37,6 +37,7 @@ public class ConversionProviderImpl implements ConversionProvider {
     @Override
     public Mono<ConversionRate> getConversionRate(String from, String to) {
         RequestHeadersSpec<?> defaultRequestSpec = createRequestHeadersSpec(from, to);
+        log.info("Getting conversion rate using url: {}", providerProperties.getApiUrl());
         return customizeRequestSpec(defaultRequestSpec)
             .exchangeToMono(this::handleClientResponse);
     }

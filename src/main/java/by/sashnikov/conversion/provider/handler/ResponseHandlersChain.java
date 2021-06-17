@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
+@Slf4j
 public class ResponseHandlersChain<T> {
 
     private final List<? extends ResponseHandler<T>> handlers;
@@ -18,6 +20,7 @@ public class ResponseHandlersChain<T> {
 
         for (ResponseHandler<T> handler : handlers) {
             Optional<Mono<T>> handle = handler.handle(clientResponse);
+            handle.ifPresent(tMono -> log.info("Found conversion response handler: {}", handler));
             result = handle.orElse(Mono.empty());
         }
 

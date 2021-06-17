@@ -11,7 +11,3 @@ conversion:
       api-url: http://api.exchangeratesapi.io/v1
       conversion-rate-path: /latest?access_key={api-key}&base={from}&symbols={to}
       api-key:
-
-spring:
-  profiles:
-    active: local
