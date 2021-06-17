@@ -1,0 +1,13 @@
+conversion:
+  provider:
+    exchangerate-api-com:
+      enabled: false
+      api-url: https://v6.exchangerate-api.com/v6
+      conversion-rate-path: /{api-key}/pair/{from}/{to}
+      api-key:
+
+    exchangerates-api-io:
+      enabled: false
+      api-url: http://api.exchangeratesapi.io/v1
+      conversion-rate-path: /latest?access_key={api-key}&base={from}&symbols={to}
+      api-key:

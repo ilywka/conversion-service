@@ -1,0 +1,6 @@
+conversion:
+  provider:
+    exchangerate-api-com:
+      enabled: true
+    exchangerates-api-io:
+      enabled: true
