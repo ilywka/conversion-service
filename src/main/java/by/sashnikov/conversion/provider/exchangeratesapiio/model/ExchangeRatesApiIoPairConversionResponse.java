@@ -1,4 +1,4 @@
-package by.sashnikov.conversion.provider.exchangerateapicom.model;
+package by.sashnikov.conversion.provider.exchangeratesapiio.model;
 
 import static java.util.Objects.isNull;
 
@@ -14,30 +14,30 @@ import java.io.IOException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-;
-
 @Data
 @NoArgsConstructor
 @JsonDeserialize(using = PairConversionResponseDeserializer.class)
-public abstract class ProviderPairConversionResponse {
-    private String result;
+public class ExchangeRatesApiIoPairConversionResponse {
+    private Boolean success;
 }
 
-class PairConversionResponseDeserializer extends StdDeserializer<ProviderPairConversionResponse> {
+class PairConversionResponseDeserializer extends StdDeserializer<ExchangeRatesApiIoPairConversionResponse> {
+    private static final String ERROR_FIELD_NAME = "error";
 
     public PairConversionResponseDeserializer() {
-        super(ProviderPairConversionResponse.class);
+        super(ExchangeRatesApiIoPairConversionResponse.class);
     }
 
     @Override
-    public ProviderPairConversionResponse deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public ExchangeRatesApiIoPairConversionResponse deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         ObjectCodec codec = p.getCodec();
         TreeNode jsonNode = codec.readTree(p);
-        TreeNode errorField = jsonNode.get(ProviderPairConversionRateErrorResponse.ERROR_FIELD_NAME);
+        TreeNode errorField = jsonNode.get(ERROR_FIELD_NAME);
         if (isNull(errorField)) {
-            return codec.treeToValue(jsonNode, ProviderPairConversionRateSuccessResponse.class);
+            return codec.treeToValue(jsonNode, ExchangeRatesApiIoPairConversionSuccessResponse.class);
         } else {
-            return codec.treeToValue(jsonNode, ProviderPairConversionRateErrorResponse.class);
+            return codec.treeToValue(jsonNode, ExchangeRatesApiIoPairConversionErrorResponse.class);
         }
     }
 }
+

@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "error": {
+    "code": 104,
+    "info": "The maximum allowed API amount of monthly API requests has been reached. "
+  }
+}

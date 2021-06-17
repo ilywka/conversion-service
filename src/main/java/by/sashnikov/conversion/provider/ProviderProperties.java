@@ -15,7 +15,7 @@ public class ProviderProperties {
     @NotEmpty
     private String apiUrl;
     @NotEmpty
-    private String pairConversionPath;
+    private String conversionRatePath;
     @NotEmpty
     private String apiKey;
 }

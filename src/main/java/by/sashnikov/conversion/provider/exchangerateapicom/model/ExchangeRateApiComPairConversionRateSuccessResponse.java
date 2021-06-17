@@ -4,15 +4,17 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @JsonDeserialize
-@JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
-public class ProviderPairConversionRateErrorResponse extends ProviderPairConversionResponse {
-    public static final String ERROR_FIELD_NAME = "error-type";
-
-    private String errorType;
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class ExchangeRateApiComPairConversionRateSuccessResponse extends ExchangeRateApiComPairConversionResponse {
+    private String baseCode;
+    private String targetCode;
+    private BigDecimal conversionRate;
 }

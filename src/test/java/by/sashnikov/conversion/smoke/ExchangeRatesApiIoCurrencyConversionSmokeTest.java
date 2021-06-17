@@ -28,22 +28,22 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class CurrencyConversionSmokeTest {
+public class ExchangeRatesApiIoCurrencyConversionSmokeTest {
 
-    private static final String CONVERSION_REQUEST_FILE = "classpath:by/sashnikov/conversion/smoke/conversion-request-test-data.json";
+    private static final String CONVERSION_REQUEST_FILE = "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-request-test-data.json";
     private static final String CONVERSION_INCORRECT_CODE_REQUEST_FILE =
-        "classpath:by/sashnikov/conversion/smoke/conversion-incorrect-code-request-test-data.json";
+        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-incorrect-code-request-test-data.json";
     private static final String CONVERSION_QUOTA_REACHED_REQUEST_FILE =
-        "classpath:by/sashnikov/conversion/smoke/conversion-quota-reached-request-test-data.json";
+        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-quota-reached-request-test-data.json";
     private static final String CONVERSION_RATE_PROVIDER_SUCCESS_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/conversion-rate-provider-success-response-test-data.json";
+        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-rate-provider-success-response-test-data.json";
     private static final String CONVERSION_RATE_PROVIDER_INCORRECT_CODE_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/conversion-rate-provider-incorrect-code-response-test-data.json";
+        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-rate-provider-incorrect-code-response-test-data.json";
     private static final String CONVERSION_RATE_PROVIDER_QUOTA_REACHED_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/conversion-rate-provider-quota-reached-response-test-data.json";
+        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-rate-provider-quota-reached-response-test-data.json";
     private static final String CONVERSION_EXPECTED_RESPONSE_FILE =
-        "classpath:by/sashnikov/conversion/smoke/conversion-expected-response-test-data.json";
-    private static final String PROVIDER_CONVERSION_REQUEST_PATH = "/api/{apiKey}/conversion/{from}/{to}";
+        "classpath:by/sashnikov/conversion/smoke/exchangeratesapiio/conversion-expected-response-test-data.json";
+    private static final String PROVIDER_CONVERSION_REQUEST_PATH = "/latest?access_key={api-key}&base={from}&symbols={to}";
     private static final String API_KEY = "1q2w3e4r";
 
     private static MockWebServer mockWebServer;
@@ -64,9 +64,9 @@ public class CurrencyConversionSmokeTest {
 
     @DynamicPropertySource
     static void registerMockServerProperties(DynamicPropertyRegistry registry) {
-        registry.add("conversion.provider.exchangerate-api-com.apiUrl", () -> mockWebServer.url("").toString());
-        registry.add("conversion.provider.exchangerate-api-com.pairConversionPath", () -> PROVIDER_CONVERSION_REQUEST_PATH);
-        registry.add("conversion.provider.exchangerate-api-com.apiKey", () -> API_KEY);
+        registry.add("conversion.provider.exchangerates-api-io.enabled", () -> true);
+        registry.add("conversion.provider.exchangerates-api-io.apiUrl", () -> mockWebServer.url("").toString());
+        registry.add("conversion.provider.exchangerates-api-io.apiKey", () -> API_KEY);
     }
 
     @BeforeEach
@@ -75,7 +75,7 @@ public class CurrencyConversionSmokeTest {
             @Override
             public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
                 String conversionCorrectRequestPath = PROVIDER_CONVERSION_REQUEST_PATH
-                    .replace("{apiKey}", API_KEY)
+                    .replace("{api-key}", API_KEY)
                     .replace("{from}", "USD")
                     .replace("{to}", "EUR");
                 String conversionInvalidRequestPath = conversionCorrectRequestPath.replace("USD", "QWE");

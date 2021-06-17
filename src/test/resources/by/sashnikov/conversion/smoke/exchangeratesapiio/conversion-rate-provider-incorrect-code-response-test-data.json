@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "error": {
+    "code": 201,
+    "info": "An invalid base currency has been entered."
+  }
+}
